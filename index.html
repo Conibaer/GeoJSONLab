@@ -21,8 +21,10 @@
         }
 
         #side-panel {
+            text-align: center;
             flex-basis: 500px;
             overflow-y: scroll;
+            background-color: rgb(211,211,211);
         }
 
         #map {   
@@ -30,14 +32,14 @@
         }
 
         button {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         table {
             border-collapse: collapse;
             border-spacing: 0;
             width: 100%;
-            border: 1px solid #ddd;
+            border: 2px solid #ddd;
         }
 
         th,
@@ -54,21 +56,22 @@
 
 <body>
     <main id="container">
+        <div id="map"></div>
         <div id="side-panel">
         
-            <h2>Highest Peaks in WA</h2>
+            <h2> Highest Peaks in WA</h2>
             <button>Sort by Prominence</button>
 
             <table>
                 <tr>
                     <th>Name</th>
                     <th>Rank by total height</th>
-                    <th>Prominence</th>
+                    <th>Prominence(ft)</th>
                 </tr>
             </table>
         
         </div>
-        <div id="map"></div>
+        
 
     </main>
     <script>
@@ -79,7 +82,7 @@
         // define the map object
         let map = new mapboxgl.Map({
             container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/satellite-v9', // style URL
+            style: 'mapbox://styles/mapbox/outdoors-v11', // style URL
             zoom: 6, // starting zoom
             center: [-120, 47] // starting center
         });
@@ -88,11 +91,11 @@
 
         async function geojsonFetch() {
 
-            let response, highpoints, japan, table;
+            let response, highpoints, NCNP, table;
             response = await fetch('assets/HPWA.geojson');
             highpoints = await response.json();
-            response = await fetch('assets/japan.json');
-            japan = await response.json();
+            response = await fetch('assets/NCNP.geojson');
+            NCNP = await response.json();
 
 
 
@@ -131,17 +134,17 @@
                 });
 
 
-                map.addSource('japan', {
+                map.addSource('NCNP', {
                     type: 'geojson',
-                    data: japan
+                    data: NCNP
                 });
 
                 map.addLayer({
-                    'id': 'japan-layer',
+                    'id': 'NCNP-layer',
                     'type': 'fill',
-                    'source': 'japan',
+                    'source': 'NCNP',
                     'paint': {
-                        'fill-color': '#0080ff', // blue color fill
+                        'fill-color': '##228B22', // forestgreen color fill
                         'fill-opacity': 0.5
                     }
                 });
@@ -152,7 +155,7 @@
 
         geojsonFetch();
 
-        let btn = document.getElementsByTagName("button")[0];
+        let btn = document.getElementsByTagName("button")[1];
 
         btn.addEventListener('click', sortTable);
 
