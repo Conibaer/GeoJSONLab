@@ -27,6 +27,12 @@
             background-color: rgb(211,211,211);
         }
 
+        @media screen and (max-width: 1024px) {
+            #side-panel {
+                display: none;
+            }
+        }
+
         #map {   
             flex-grow: 1;
         }
@@ -44,7 +50,7 @@
 
         th,
         td {
-            text-align: left;
+            text-align: center;
             padding: 16px;
         }
 
@@ -65,7 +71,7 @@
             <table>
                 <tr>
                     <th>Name</th>
-                    <th>Rank by total height</th>
+                    <th>Rank by absolute elevation</th>
                     <th>Prominence(ft)</th>
                 </tr>
             </table>
@@ -116,6 +122,21 @@
             //load data to the map as new layers and table on the side.
             map.on('load', function loadingData() {
 
+                map.addSource('NCNP', {
+                    type: 'geojson',
+                    data: NCNP
+                });
+
+                map.addLayer({
+                    'id': 'NCNP-layer',
+                    'type': 'fill',
+                    'source': 'NCNP',
+                    'paint': {
+                        'fill-color': '#228B22', // forestgreen color fill
+                        'fill-opacity': 0.5
+                    }
+                });
+
                 map.addSource('highpoints', {
                     type: 'geojson',
                     data: highpoints
@@ -132,23 +153,6 @@
                         'circle-stroke-color': 'blue'
                     }
                 });
-
-
-                map.addSource('NCNP', {
-                    type: 'geojson',
-                    data: NCNP
-                });
-
-                map.addLayer({
-                    'id': 'NCNP-layer',
-                    'type': 'fill',
-                    'source': 'NCNP',
-                    'paint': {
-                        'fill-color': '##228B22', // forestgreen color fill
-                        'fill-opacity': 0.5
-                    }
-                });
-
             });
 
         }
